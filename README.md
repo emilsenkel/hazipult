@@ -1,5 +1,1 @@
-# 📚 HáziPult
-
-**Személyes házi feladat szervező 13 éveseknek**
-
-... (see full README in the folder)
+See full README in the local folder or previous push.
