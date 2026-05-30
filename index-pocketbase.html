@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HáziPult • Cloud (PocketBase)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- PocketBase Client -->
+  <script src="https://unpkg.com/pocketbase@0.21.5/dist/pocketbase.umd.js"></script>
+  <style>
+    /* Base styles from original HáziPult will be merged here */
+  </style>
+</head>
+<body>
+  <h1 class="text-3xl font-bold p-8">HáziPult - Cloud Version (Work in Progress)</h1>
+  
+  <div class="p-8">
+    <p>PocketBase integration is being added.</p>
+    <p>Public PocketBase URL: <strong>https://hazipult.chez-emil-ai.com</strong></p>
+  </div>
+
+  <script>
+    const POCKETBASE_URL = "https://hazipult.chez-emil-ai.com";
+    const pb = new PocketBase(POCKETBASE_URL);
+
+    console.log("PocketBase client initialized for:", POCKETBASE_URL);
+
+    // TODO: Full data sync, photo upload, and UI will be built here step by step.
+  </script>
+</body>
+</html>
