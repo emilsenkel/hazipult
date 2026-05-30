@@ -16,67 +16,70 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@600&amp;display=swap');
     body { font-family: 'Inter', system_ui, sans-serif; }
     .title-font { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 600; }
+    .stat-card { transition: transform 0.2s ease; }
+    .task-card { transition: all 0.2s ease; }
+    .task-card:hover { transform: translateY(-1px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
   </style>
 </head>
 <body class="bg-slate-50 min-h-screen">
 
   <!-- Login Screen -->
-  <div id="login-screen" class="min-h-screen flex items-center justify-center p-6">
+  <div id="login-screen" class="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-slate-50 to-slate-100">
     <div class="max-w-md w-full">
       <div class="text-center mb-8">
-        <div class="w-16 h-16 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+        <div class="w-16 h-16 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-xl">
           <i class="fa-solid fa-book text-white text-3xl"></i>
         </div>
-        <h1 class="title-font text-4xl font-semibold tracking-tight">HáziPult</h1>
-        <p class="text-slate-500 mt-2">Jelentkezz be a fiókoddal</p>
+        <h1 class="title-font text-4xl font-semibold tracking-tight text-slate-900">HáziPult</h1>
+        <p class="text-slate-500 mt-2 text-lg">Jelentkezz be a fiókoddal</p>
       </div>
 
-      <div class="bg-white rounded-3xl shadow p-8">
-        <form id="login-form" class="space-y-5">
+      <div class="bg-white rounded-3xl shadow-2xl p-8 border border-slate-100">
+        <form id="login-form" class="space-y-6">
           <div>
-            <label class="block text-sm font-medium text-slate-600 mb-1.5">Felhasználónév</label>
-            <input id="login-email" type="text" required 
-                   class="w-full border border-slate-200 rounded-2xl px-4 py-3 focus:outline-none focus:border-indigo-400 text-sm"
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Felhasználónév</label>
+            <input id="login-username" type="text" required 
+                   class="w-full border border-slate-200 focus:border-indigo-400 rounded-2xl px-4 py-3 text-base outline-none transition-colors"
                    placeholder="oliver">
           </div>
           <div>
-            <label class="block text-sm font-medium text-slate-600 mb-1.5">Jelszó</label>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Jelszó</label>
             <input id="login-password" type="password" required
-                   class="w-full border border-slate-200 rounded-2xl px-4 py-3 focus:outline-none focus:border-indigo-400 text-sm"
+                   class="w-full border border-slate-200 focus:border-indigo-400 rounded-2xl px-4 py-3 text-base outline-none transition-colors"
                    placeholder="••••••••">
           </div>
           <button type="submit"
-                  class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 transition-colors text-white font-semibold py-3.5 rounded-2xl text-sm">
+                  class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold py-3.5 rounded-2xl text-base transition-all shadow-lg hover:shadow-xl">
             Bejelentkezés
           </button>
         </form>
       </div>
       <p class="text-center text-xs text-slate-400 mt-6">
-        Kérd a szüleidet, hogy hozzanak létre neked fiókot a PocketBase-ben.
+        Kérd a szüleidet, hogy hozzanak létre neked fiókot
       </p>
     </div>
   </div>
 
   <!-- Main App -->
   <div id="app-screen" class="hidden">
-    <header class="bg-white border-b sticky top-0 z-50">
+    <header class="bg-white border-b border-slate-100 sticky top-0 z-50">
       <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
         <div class="flex items-center gap-x-3">
-          <div class="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center">
-            <i class="fa-solid fa-book text-white"></i>
+          <div class="w-11 h-11 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-sm">
+            <i class="fa-solid fa-book text-white text-2xl"></i>
           </div>
           <div>
-            <span class="title-font text-2xl font-semibold tracking-tight">HáziPult</span>
+            <span class="title-font text-3xl font-semibold tracking-tighter text-slate-900">HáziPult</span>
           </div>
         </div>
 
         <div class="flex items-center gap-x-4">
           <div class="text-right">
-            <div id="user-name" class="font-semibold text-sm"></div>
-            <div class="text-[10px] text-slate-500 -mt-0.5">bejelentkezve</div>
+            <div id="user-name" class="font-semibold text-slate-800"></div>
+            <div class="text-xs text-slate-500 -mt-0.5">bejelentkezve</div>
           </div>
           <button onclick="logout()" 
-                  class="text-sm px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-2xl font-medium flex items-center gap-x-2 transition-colors">
+                  class="px-4 py-2 text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-medium flex items-center gap-x-2 transition-colors">
             <i class="fa-solid fa-sign-out-alt"></i>
             <span>Kijelentkezés</span>
           </button>
@@ -85,36 +88,36 @@
     </header>
 
     <div class="max-w-5xl mx-auto px-6 py-8">
-      <!-- Stats -->
+      <!-- Stats Row -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div class="bg-white rounded-3xl p-5 border">
-          <div class="text-xs font-semibold text-rose-500 tracking-wider">MAI FELADATOK</div>
-          <div id="stat-today" class="text-4xl font-bold mt-1">0</div>
+        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 stat-card">
+          <div class="text-xs font-bold tracking-wider text-rose-500">MAI FELADATOK</div>
+          <div id="stat-today" class="text-4xl font-bold text-slate-900 mt-1">0</div>
         </div>
-        <div class="bg-white rounded-3xl p-5 border">
-          <div class="text-xs font-semibold text-amber-500 tracking-wider">EZEN A HÉTEN</div>
-          <div id="stat-week" class="text-4xl font-bold mt-1">0</div>
+        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 stat-card">
+          <div class="text-xs font-bold tracking-wider text-amber-500">EZEN A HÉTEN</div>
+          <div id="stat-week" class="text-4xl font-bold text-slate-900 mt-1">0</div>
         </div>
-        <div class="bg-white rounded-3xl p-5 border">
-          <div class="text-xs font-semibold text-emerald-500 tracking-wider">KÉSZ</div>
-          <div id="stat-done" class="text-4xl font-bold mt-1">0</div>
+        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 stat-card">
+          <div class="text-xs font-bold tracking-wider text-emerald-500">KÉSZ</div>
+          <div id="stat-done" class="text-4xl font-bold text-slate-900 mt-1">0</div>
         </div>
-        <div class="bg-white rounded-3xl p-5 border">
-          <div class="text-xs font-semibold text-indigo-500 tracking-wider">AKTÍV</div>
-          <div id="stat-active" class="text-4xl font-bold mt-1">0</div>
+        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 stat-card">
+          <div class="text-xs font-bold tracking-wider text-indigo-500">AKTÍV</div>
+          <div id="stat-active" class="text-4xl font-bold text-slate-900 mt-1">0</div>
         </div>
       </div>
 
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-semibold tracking-tight">Feladataim</h2>
+        <h2 class="text-2xl font-semibold tracking-tight text-slate-900">Feladataim</h2>
         <button onclick="showAddModal()"
-                class="flex items-center gap-x-2 bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-2xl text-sm font-medium transition-colors">
-          <i class="fa-solid fa-plus"></i>
+                class="group flex items-center gap-x-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-2xl font-semibold text-sm transition-all active:scale-[0.985]">
+          <i class="fa-solid fa-plus group-active:rotate-90 transition-transform"></i>
           <span>Új feladat</span>
         </button>
       </div>
 
-      <!-- Tasks -->
+      <!-- Tasks List -->
       <div id="tasks-container" class="space-y-3">
         <!-- Populated by JS -->
       </div>
@@ -122,27 +125,29 @@
   </div>
 
   <!-- Add/Edit Modal -->
-  <div id="modal" onclick="if (event.target.id === 'modal') closeModal()" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
-    <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-md rounded-3xl shadow-xl p-6">
-      <h3 id="modal-title-text" class="text-xl font-semibold mb-5">Új házi feladat</h3>
+  <div id="modal" onclick="if (event.target.id === 'modal') closeModal()" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+      <div class="px-6 py-5 border-b">
+        <h3 id="modal-title-text" class="text-xl font-semibold text-slate-900">Új házi feladat</h3>
+      </div>
 
-      <div class="space-y-4">
+      <div class="p-6 space-y-5">
         <div>
-          <label class="text-sm font-medium text-slate-600">Tantárgy</label>
-          <input id="modal-subject" type="text" class="w-full border border-slate-200 rounded-2xl px-4 py-2.5 mt-1 text-sm" placeholder="Matematika">
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Tantárgy</label>
+          <input id="modal-subject" type="text" class="w-full border border-slate-200 rounded-2xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-400" placeholder="Matematika">
         </div>
         <div>
-          <label class="text-sm font-medium text-slate-600">Cím / Leírás</label>
-          <input id="modal-title" type="text" class="w-full border border-slate-200 rounded-2xl px-4 py-2.5 mt-1 text-sm" placeholder="Oldal 45-48">
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Cím / Leírás</label>
+          <input id="modal-title" type="text" class="w-full border border-slate-200 rounded-2xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-400" placeholder="Oldal 45-48">
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="text-sm font-medium text-slate-600">Határidő</label>
-            <input id="modal-due" type="date" class="w-full border border-slate-200 rounded-2xl px-4 py-2.5 mt-1 text-sm">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Határidő</label>
+            <input id="modal-due" type="date" class="w-full border border-slate-200 rounded-2xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
           </div>
           <div>
-            <label class="text-sm font-medium text-slate-600">Prioritás</label>
-            <select id="modal-priority" class="w-full border border-slate-200 rounded-2xl px-4 py-2.5 mt-1 text-sm">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Prioritás</label>
+            <select id="modal-priority" class="w-full border border-slate-200 rounded-2xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
               <option value="low">Alacsony</option>
               <option value="medium" selected>Közepes</option>
               <option value="high">Magas</option>
@@ -150,14 +155,14 @@
           </div>
         </div>
         <div>
-          <label class="text-sm font-medium text-slate-600">Fotó (opcionális)</label>
-          <input id="modal-image" type="file" accept="image/*" class="mt-1 text-sm">
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Fotó (opcionális)</label>
+          <input id="modal-image" type="file" accept="image/*" class="w-full text-sm mt-1">
         </div>
       </div>
 
-      <div class="flex gap-3 mt-6">
-        <button onclick="closeModal()" class="flex-1 py-3 bg-slate-100 rounded-2xl font-medium text-sm">Mégse</button>
-        <button onclick="saveTask()" class="flex-1 py-3 bg-indigo-600 text-white rounded-2xl font-medium text-sm">Mentés</button>
+      <div class="border-t bg-slate-50 px-6 py-4 flex gap-3">
+        <button onclick="closeModal()" class="flex-1 py-3 text-sm font-semibold bg-white border border-slate-200 text-slate-700 rounded-2xl hover:bg-slate-100 transition-colors">Mégse</button>
+        <button onclick="saveTask()" class="flex-1 py-3 text-sm font-semibold bg-indigo-600 text-white rounded-2xl hover:bg-indigo-500 transition-colors">Mentés</button>
       </div>
     </div>
   </div>
@@ -168,7 +173,7 @@
 
     let currentUser = null;
 
-    // Login
+    // Login form
     document.getElementById('login-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       const username = document.getElementById('login-email').value;
@@ -198,7 +203,7 @@
       try {
         const records = await pb.collection('assignments').getFullList({
           filter: `user_id = "${currentUser.id}"`,
-          sort: '-created',
+          sort: '-due_date',
         });
 
         renderTasks(records);
@@ -237,31 +242,34 @@
 
       tasks.forEach(task => {
         const div = document.createElement('div');
-        div.className = `bg-white border border-slate-100 rounded-3xl p-4 flex gap-4 items-start ${task.completed ? 'opacity-75' : ''}`;
+        div.className = `bg-white border border-slate-100 rounded-3xl p-4 flex gap-4 items-start task-card ${task.completed ? 'opacity-75' : ''}`;
 
         let imageHtml = '';
         if (task.image) {
           const imgUrl = `${POCKETBASE_URL}/api/files/assignments/${task.id}/${task.image}`;
-          imageHtml = `<img src="${imgUrl}" class="w-14 h-14 object-cover rounded-2xl mt-2 border cursor-pointer" onclick="window.open('${imgUrl}', '_blank')">`;
+          imageHtml = `<img src="${imgUrl}" class="w-16 h-16 object-cover rounded-2xl mt-2 border border-slate-200 cursor-pointer" onclick="window.open('${imgUrl}', '_blank')">`;
         }
 
         div.innerHTML = `
           <div class="flex-1">
-            <div class="flex items-center gap-x-2 mb-1">
-              <span class="px-3 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-700">${task.subject}</span>
-              <span class="text-xs px-2.5 py-0.5 rounded-xl font-bold ${task.priority === 'high' ? 'bg-rose-100 text-rose-600' : task.priority === 'medium' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'}">${task.priority.toUpperCase()}</span>
+            <div class="flex items-center gap-x-2 mb-1.5">
+              <span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-700">${task.subject}</span>
+              <span class="text-xs px-2 py-0.5 rounded-xl font-bold ${task.priority === 'high' ? 'bg-rose-100 text-rose-600' : task.priority === 'medium' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'}">${task.priority.toUpperCase()}</span>
             </div>
-            <div class="font-semibold leading-tight ${task.completed ? 'line-through text-slate-400' : ''}">${task.title}</div>
-            <div class="text-xs text-slate-500 mt-1">Határidő: ${task.due_date}</div>
+            <div class="font-semibold text-base leading-snug ${task.completed ? 'line-through text-slate-400' : 'text-slate-800'}">${task.title}</div>
+            <div class="text-xs text-slate-500 mt-2 flex items-center gap-x-1">
+              <i class="fa-regular fa-calendar"></i>
+              <span>Határidő: ${task.due_date}</span>
+            </div>
             ${imageHtml}
           </div>
 
-          <div class="flex flex-col items-end justify-between h-full">
+          <div class="flex flex-col items-end justify-between">
             <input type="checkbox" ${task.completed ? 'checked' : ''} 
-                   class="w-5 h-5 accent-indigo-600" 
+                   class="w-5 h-5 accent-indigo-600 cursor-pointer" 
                    onchange="toggleComplete('${task.id}', this.checked)">
             
-            <button onclick="deleteTask('${task.id}')" class="text-red-400 hover:text-red-600 mt-auto">
+            <button onclick="deleteTask('${task.id}')" class="text-red-400 hover:text-red-600 mt-4">
               <i class="fa-solid fa-trash text-sm"></i>
             </button>
           </div>
@@ -360,10 +368,10 @@
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
           .then((registration) => {
-            console.log('SW registered: ', registration);
+            console.log('SW registered');
           })
-          .catch((registrationError) => {
-            console.log('SW registration failed: ', registrationError);
+          .catch((error) => {
+            console.log('SW failed');
           });
       });
     }
