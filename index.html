@@ -1,1 +1,22 @@
-[Full updated index.html - too large for this call, will be handled in next step if needed]
+<!-- PocketBase client for cloud sync -->
+<script src="https://unpkg.com/pocketbase@0.21.5/dist/pocketbase.umd.js"></script>
+
+<script>
+  // === PocketBase Configuration ===
+  const POCKETBASE_URL = "https://hazipult.chez-emil-ai.com";
+  let pb;
+
+  function initPocketBase() {
+    try {
+      pb = new PocketBase(POCKETBASE_URL);
+      console.log("[HáziPult] Connected to PocketBase at", POCKETBASE_URL);
+    } catch (e) {
+      console.warn("[HáziPult] Could not initialize PocketBase:", e);
+    }
+  }
+
+  // Initialize early
+  if (typeof PocketBase !== "undefined") {
+    initPocketBase();
+  }
+</script>
