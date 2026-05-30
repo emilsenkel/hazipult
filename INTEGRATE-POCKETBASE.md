@@ -1,30 +1,27 @@
-## Integrate HáziPult with Your PocketBase (Updated)
+## Full Integration + Multi-Kid Login (In Progress)
 
-**Your public PocketBase URL:** `https://hazipult.chez-emil-ai.com`
+**Goal:** Turn HáziPult into a real multi-user cloud app using your PocketBase.
 
-✅ Tunnel and DNS confirmed working.
+### What will be built
+- Login screen (kids can log in with their own account)
+- Full data sync with PocketBase (everything saved in the cloud automatically)
+- Photo attachments for homework tasks
+- Each kid only sees their own tasks
+- Simple and kid-friendly interface
 
-### Code Update Started
+### Current Progress
+- `index-pocketbase.html` created as the new working version
+- PocketBase client initialized
+- Basic connection to `https://hazipult.chez-emil-ai.com` confirmed
 
-I have begun the integration:
+### Next Steps (being executed now)
+1. Add proper authentication (login/register for multiple kids)
+2. Replace all localStorage logic with PocketBase
+3. Add photo upload + display
+4. Polish the UI for multi-user use
 
-- Created a new dedicated file: **`index-pocketbase.html`**
-  - This is the new version that will connect to your PocketBase.
-  - It already includes the PocketBase JavaScript client and basic connection.
+I am now starting to build the full version.
 
-- The original `index.html` remains untouched for now (safe).
+You can follow progress by checking the commits on `index-pocketbase.html`.
 
-### Current State of the New File
-- PocketBase client loaded
-- Connected to `https://hazipult.chez-emil-ai.com`
-- Basic console logging to confirm connection
-
-### Next Steps (I can do these now)
-
-Reply with what you want next:
-
-1. **"Add data sync"** → Make tasks load/save automatically from your server
-2. **"Add photo upload"** → Enable attaching pictures to homework tasks
-3. **"Full integration"** → Do both + simple device ID system
-
-Just tell me the number or describe what you want, and I will continue updating the code in the repo.
+Once ready, we will replace or rename it to become the main app.
