@@ -3,30 +3,329 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HáziPult • Cloud (PocketBase)</title>
+  <title>HáziPult • Cloud</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- PocketBase Client -->
   <script src="https://unpkg.com/pocketbase@0.21.5/dist/pocketbase.umd.js"></script>
   <style>
-    /* Base styles from original HáziPult will be merged here */
+    body { font-family: 'Inter', system_ui, sans-serif; }
+    .title-font { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 600; }
   </style>
 </head>
-<body>
-  <h1 class="text-3xl font-bold p-8">HáziPult - Cloud Version (Work in Progress)</h1>
-  
-  <div class="p-8">
-    <p>PocketBase integration is being added.</p>
-    <p>Public PocketBase URL: <strong>https://hazipult.chez-emil-ai.com</strong></p>
+<body class="bg-slate-50 min-h-screen">
+
+  <!-- Login Screen -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-md w-full bg-white rounded-3xl shadow p-8">
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <i class="fa-solid fa-book text-white text-3xl"></i>
+        </div>
+        <h1 class="text-3xl font-semibold">HáziPult</h1>
+        <p class="text-slate-500 mt-1">Jelentkezz be a fiókoddal</p>
+      </div>
+
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="text-sm font-medium text-slate-600">Email</label>
+          <input id="login-email" type="email" required
+                 class="w-full mt-1 border border-slate-200 rounded-2xl px-4 py-3 focus:outline-none focus:border-indigo-400"
+                 placeholder="pl. david@csalad.hu">
+        </div>
+        <div>
+          <label class="text-sm font-medium text-slate-600">Jelszó</label>
+          <input id="login-password" type="password" required
+                 class="w-full mt-1 border border-slate-200 rounded-2xl px-4 py-3 focus:outline-none focus:border-indigo-400"
+                 placeholder="••••••••">
+        </div>
+        <button type="submit"
+                class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 rounded-2xl transition-colors">
+          Bejelentkezés
+        </button>
+      </form>
+
+      <p class="text-center text-xs text-slate-500 mt-6">
+        Kérd meg a szüleidet, hogy hozzanak létre neked fiókot a PocketBase-ben.
+      </p>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app-screen" class="hidden">
+    <!-- Header -->
+    <header class="bg-white border-b">
+      <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-x-3">
+          <div class="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center">
+            <i class="fa-solid fa-book text-white"></i>
+          </div>
+          <div>
+            <span class="font-semibold text-xl">HáziPult</span>
+            <span class="text-xs text-slate-500 block -mt-1">Cloud</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-x-4">
+          <div class="text-right">
+            <div id="user-name" class="font-semibold"></div>
+            <div class="text-xs text-slate-500">bejelentkezve</div>
+          </div>
+          <button onclick="logout()"
+                  class="px-4 py-2 text-sm bg-slate-100 hover:bg-slate-200 rounded-2xl font-medium flex items-center gap-x-2">
+            <i class="fa-solid fa-sign-out-alt"></i>
+            <span>Kijelentkezés</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-5xl mx-auto p-6">
+      <!-- Quick Add Button -->
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold">Feladataim</h2>
+        <button onclick="showAddModal()"
+                class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-2xl font-medium flex items-center gap-x-2">
+          <i class="fa-solid fa-plus"></i>
+          <span>Új feladat</span>
+        </button>
+      </div>
+
+      <!-- Tasks List -->
+      <div id="tasks-list" class="space-y-3">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div id="modal" onclick="if (event.target.id === 'modal') closeModal()" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center p-4">
+    <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-md rounded-3xl p-6">
+      <h3 id="modal-title" class="text-xl font-semibold mb-4">Új feladat</h3>
+
+      <div class="space-y-4">
+        <div>
+          <label class="text-sm font-medium">Tantárgy</label>
+          <input id="modal-subject" type="text" class="w-full border rounded-2xl px-4 py-2.5 mt-1" placeholder="Matematika">
+        </div>
+        <div>
+          <label class="text-sm font-medium">Cím</label>
+          <input id="modal-title-input" type="text" class="w-full border rounded-2xl px-4 py-2.5 mt-1" placeholder="Oldal 45-48">
+        </div>
+        <div>
+          <label class="text-sm font-medium">Határidő</label>
+          <input id="modal-due" type="date" class="w-full border rounded-2xl px-4 py-2.5 mt-1">
+        </div>
+        <div>
+          <label class="text-sm font-medium">Prioritás</label>
+          <select id="modal-priority" class="w-full border rounded-2xl px-4 py-2.5 mt-1">
+            <option value="low">Alacsony</option>
+            <option value="medium" selected>Közepes</option>
+            <option value="high">Magas</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm font-medium">Fotó (opcionális)</label>
+          <input id="modal-image" type="file" accept="image/*" class="mt-1">
+        </div>
+      </div>
+
+      <div class="flex gap-3 mt-6">
+        <button onclick="closeModal()" class="flex-1 py-3 bg-slate-100 rounded-2xl font-medium">Mégse</button>
+        <button onclick="saveTask()" class="flex-1 py-3 bg-indigo-600 text-white rounded-2xl font-medium">Mentés</button>
+      </div>
+    </div>
   </div>
 
   <script>
     const POCKETBASE_URL = "https://hazipult.chez-emil-ai.com";
     const pb = new PocketBase(POCKETBASE_URL);
 
-    console.log("PocketBase client initialized for:", POCKETBASE_URL);
+    let currentUser = null;
 
-    // TODO: Full data sync, photo upload, and UI will be built here step by step.
+    // Login form
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      try {
+        await pb.collection('users').authWithPassword(email, password);
+        currentUser = pb.authStore.model;
+        showApp();
+      } catch (err) {
+        alert('Hibás email vagy jelszó!');
+      }
+    });
+
+    function showApp() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('app-screen').classList.remove('hidden');
+
+      document.getElementById('user-name').textContent = currentUser.name || currentUser.email;
+      loadTasks();
+    }
+
+    function logout() {
+      pb.authStore.clear();
+      location.reload();
+    }
+
+    // Load tasks for current user
+    async function loadTasks() {
+      const container = document.getElementById('tasks-list');
+      container.innerHTML = '<div class="text-center py-8 text-slate-500">Betöltés...</div>';
+
+      try {
+        const records = await pb.collection('assignments').getFullList({
+          filter: `user_id = "${currentUser.id}"`,
+          sort: '-due_date',
+        });
+
+        renderTasks(records);
+      } catch (err) {
+        container.innerHTML = '<div class="text-red-500">Hiba történt a betöltéskor.</div>';
+        console.error(err);
+      }
+    }
+
+    function renderTasks(tasks) {
+      const container = document.getElementById('tasks-list');
+      if (tasks.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-slate-500">Még nincsenek feladataid.</div>`;
+        return;
+      }
+
+      container.innerHTML = '';
+
+      tasks.forEach(task => {
+        const div = document.createElement('div');
+        div.className = `bg-white border rounded-3xl p-4 flex gap-4 ${task.completed ? 'opacity-70' : ''}`;
+
+        let imageHtml = '';
+        if (task.image) {
+          const imgUrl = `${POCKETBASE_URL}/api/files/assignments/${task.id}/${task.image}`;
+          imageHtml = `<img src="${imgUrl}" class="w-16 h-16 object-cover rounded-2xl mt-2 cursor-pointer" onclick="window.open('${imgUrl}', '_blank')">`;
+        }
+
+        div.innerHTML = `
+          <div class="flex-1">
+            <div class="flex items-center gap-x-2">
+              <span class="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700">${task.subject}</span>
+              <span class="text-xs px-2 py-0.5 rounded-xl bg-amber-100 text-amber-600 font-bold">${task.priority.toUpperCase()}</span>
+            </div>
+            <div class="font-semibold mt-2 ${task.completed ? 'line-through text-slate-500' : ''}">${task.title}</div>
+            <div class="text-sm text-slate-500">Határidő: ${task.due_date}</div>
+            ${imageHtml}
+          </div>
+
+          <div class="flex flex-col items-end justify-between">
+            <input type="checkbox" ${task.completed ? 'checked' : ''} 
+                   onchange="toggleComplete('${task.id}', this.checked)" 
+                   class="w-6 h-6 accent-indigo-600">
+            
+            <button onclick="deleteTask('${task.id}')" class="text-red-400 hover:text-red-600 mt-2">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Toggle complete
+    async function toggleComplete(id, completed) {
+      try {
+        await pb.collection('assignments').update(id, { completed });
+        loadTasks();
+      } catch (err) {
+        alert('Hiba történt');
+      }
+    }
+
+    // Delete task
+    async function deleteTask(id) {
+      if (!confirm('Biztosan törlöd?')) return;
+      try {
+        await pb.collection('assignments').delete(id);
+        loadTasks();
+      } catch (err) {
+        alert('Hiba történt');
+      }
+    }
+
+    // Show add modal
+    function showAddModal() {
+      const modal = document.getElementById('modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      // Clear fields
+      document.getElementById('modal-subject').value = '';
+      document.getElementById('modal-title-input').value = '';
+      document.getElementById('modal-due').value = '';
+      document.getElementById('modal-priority').value = 'medium';
+      document.getElementById('modal-image').value = '';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+      document.getElementById('modal').classList.remove('flex');
+    }
+
+    // Save new task
+    async function saveTask() {
+      const subject = document.getElementById('modal-subject').value.trim();
+      const title = document.getElementById('modal-title-input').value.trim();
+      const due = document.getElementById('modal-due').value;
+      const priority = document.getElementById('modal-priority').value;
+      const imageInput = document.getElementById('modal-image');
+
+      if (!subject || !title || !due) {
+        alert('Töltsd ki a kötelező mezőket!');
+        return;
+      }
+
+      const data = {
+        user_id: currentUser.id,
+        subject,
+        title,
+        due_date: due,
+        priority,
+        completed: false
+      };
+
+      try {
+        let record;
+        if (imageInput.files.length > 0) {
+          const formData = new FormData();
+          Object.keys(data).forEach(key => formData.append(key, data[key]));
+          formData.append('image', imageInput.files[0]);
+
+          record = await pb.collection('assignments').create(formData);
+        } else {
+          record = await pb.collection('assignments').create(data);
+        }
+
+        closeModal();
+        loadTasks();
+      } catch (err) {
+        console.error(err);
+        alert('Hiba történt a mentéskor.');
+      }
+    }
+
+    // Auto-login if already authenticated
+    function checkAuth() {
+      if (pb.authStore.isValid) {
+        currentUser = pb.authStore.model;
+        showApp();
+      }
+    }
+
+    // Boot
+    window.onload = function() {
+      checkAuth();
+    };
   </script>
 </body>
 </html>
