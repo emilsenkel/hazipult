@@ -1,36 +1,32 @@
-## Integrate HáziPult with Your PocketBase
+## Integrate HáziPult with Your PocketBase (Updated)
 
-Your PocketBase is now publicly reachable at:
-**https://hazipult.chez-emil-ai.com**
+**Your public PocketBase URL:** `https://hazipult.chez-emil-ai.com`
 
-(The admin panel is at `https://hazipult.chez-emil-ai.com/_/`)
+✅ The admin works at `https://hazipult.chez-emil-ai.com/_/`
+✅ The root returns 404 (expected for PocketBase)
 
-### Step 1: Confirm everything works
+### Current Status
+- Cloudflare Tunnel + DNS is working correctly.
+- Collection `assignments` is ready (including `image` field for photos).
+- We are ready to connect the frontend.
 
-Open in any browser:
-- https://hazipult.chez-emil-ai.com/_/   → Should show PocketBase login (you already confirmed this works)
+### Next: Update the App Code
 
-### Step 2: Update the HáziPult App (Frontend)
+I will now update the main `index.html` to support PocketBase.
 
-We now need to change the app so it saves data to your PocketBase instead of only localStorage.
+Planned changes:
+- Load PocketBase JavaScript client
+- Connect to `https://hazipult.chez-emil-ai.com`
+- Save and load assignments from PocketBase (real cloud saving)
+- Add photo upload support (using the `image` field)
+- Simple device ID system so the same data works across phone + computer
 
-I will push the updated code to this repo.
+### How We Will Do This
 
-After the code is updated, you (or the 13-year-old) will only need to:
-1. Open the app at https://hazipult.chez-emil-ai.com (or wherever you host the frontend)
-2. On first load, it will ask for a simple connection or use a stored device ID.
+Reply with **"Start code update"** and I will:
+1. Create a new version of `index.html` with full PocketBase integration, or
+2. Update the existing `index.html` directly in the repo.
 
-### Important Notes
+Once done, you can deploy the new version (on Vercel or your Mac Mini) and the app will start saving everything to your server.
 
-- The collection `assignments` must already exist with the fields we defined earlier (including the `image` file field for photos).
-- Photos will be uploaded directly to your PocketBase storage.
-- Everything will be saved in the cloud and synced across devices.
-
-### Next Action
-
-Reply here with:
-> "Ready for code update"
-
-I will then update the main `index.html` in this repo with PocketBase support (including photo uploads).
-
-Once the code is updated, I'll also give you simple instructions for the kid to start using it with your server.
+Would you like me to start the code changes now?
