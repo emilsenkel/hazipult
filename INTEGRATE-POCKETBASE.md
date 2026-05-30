@@ -2,19 +2,29 @@
 
 **Your public PocketBase URL:** `https://hazipult.chez-emil-ai.com`
 
-✅ Tunnel and DNS are working.
+✅ Tunnel and DNS confirmed working.
 
-### Code Update - In Progress
+### Code Update Started
 
-I have started updating the app.
+I have begun the integration:
 
-**First change:** Adding PocketBase client support to the frontend.
+- Created a new dedicated file: **`index-pocketbase.html`**
+  - This is the new version that will connect to your PocketBase.
+  - It already includes the PocketBase JavaScript client and basic connection.
 
-I will push incremental updates to the `index.html` so the app can connect to your server.
+- The original `index.html` remains untouched for now (safe).
 
-Next updates will include:
-- Loading data from PocketBase on startup
-- Saving changes automatically to the cloud
-- Photo upload support
+### Current State of the New File
+- PocketBase client loaded
+- Connected to `https://hazipult.chez-emil-ai.com`
+- Basic console logging to confirm connection
 
-You can monitor progress here. Once the main integration is complete, I will also update this guide with deployment instructions.
+### Next Steps (I can do these now)
+
+Reply with what you want next:
+
+1. **"Add data sync"** → Make tasks load/save automatically from your server
+2. **"Add photo upload"** → Enable attaching pictures to homework tasks
+3. **"Full integration"** → Do both + simple device ID system
+
+Just tell me the number or describe what you want, and I will continue updating the code in the repo.
